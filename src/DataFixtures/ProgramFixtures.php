@@ -120,6 +120,12 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program->setCategory($this->getReference($programType['category']));
             $manager->persist($program);
         }
+        $arcane = new Program();
+        $arcane->setTitle('Arcane');
+        $arcane->setSynopsis('Une histoire de vengeance et de rédemption');
+        $arcane->setCategory($this->getReference('category_Animation'));
+        $this->addReference('program_Arcane', $arcane);
+        $manager->persist($arcane);
         $manager->flush();
     }
 
