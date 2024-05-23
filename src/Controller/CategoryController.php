@@ -31,7 +31,7 @@ class CategoryController extends AbstractController
             );
         }
 
-        $programs = $programRepository->findBy(['category' => $category]);
+        $programs = $programRepository->findBy(['category' => $category], ['id' => 'ASC'], 3);
         if (!$programs) {
             throw $this->createNotFoundException(
                 'No program in category : '.$categoryName.' found in program\'s table.'
