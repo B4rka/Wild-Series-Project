@@ -6,6 +6,7 @@ use App\Entity\Program;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -113,19 +114,16 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
     ];
     public function load(ObjectManager $manager): void
     {
-        foreach (self::PROGRAMS as $programType){
+        $faker = Factory::create();
+        for($i = 1; $i <= 10; $i++) {
             $program = new Program();
-            $program->setTitle($programType['title']);
-            $program->setSynopsis($programType['synopsis']);
-            $program->setCategory($this->getReference($programType['category']));
+            $program->setTitle($faker->words(3, true));
+            $program->setSynopsis($faker->paragraphs(2, true));
+            $program->setCategory($this->getReference('category_' . $faker->numberBetween(1, 5)));
+
             $manager->persist($program);
+            $this->addReference('program_' . $i, $program);
         }
-        $arcane = new Program();
-        $arcane->setTitle('Arcane');
-        $arcane->setSynopsis('Une histoire de vengeance et de rédemption');
-        $arcane->setCategory($this->getReference('category_Animation'));
-        $this->addReference('program_Arcane', $arcane);
-        $manager->persist($arcane);
         $manager->flush();
     }
 

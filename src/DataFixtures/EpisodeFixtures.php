@@ -3,9 +3,12 @@
 namespace App\DataFixtures;
 
 use App\Entity\Episode;
+use App\Entity\Season;
+use App\Entity\Program;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
 
 class EpisodeFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -28,13 +31,19 @@ class EpisodeFixtures extends Fixture implements DependentFixtureInterface
         ];
     public function load(ObjectManager $manager): void
     {
-        foreach (self::EPISODES as $episodeData) {
-            $episode = new Episode();
-            $episode->setTitle($episodeData['title']);
-            $episode->setNumber($episodeData['number']);
-            $episode->setSeason($this->getReference('season1_Arcane'));
-            $episode->setSynopsis($episodeData['synopsis']);
-            $manager->persist($episode);
+        $ref = 0;
+        $faker = Factory::create();
+        for($i = 1; $i <= 50; $i++) {
+            for ($j = 1; $j <= 10; $j++) {
+                $episode = new Episode();
+                $episode->setNumber($j);
+                $episode->setTitle($faker->words(3, true));
+                $episode->setSynopsis($faker->sentence());
+                $episode->setSeason($this->getReference('season_' . $ref));
+                $manager->persist($episode);
+
+            }
+            $ref++;
         }
 
         $manager->flush();
