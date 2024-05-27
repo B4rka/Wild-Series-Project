@@ -39,6 +39,9 @@ class ProgramController extends AbstractController
             $entityManager->persist($program);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Le nouveau programme a bien été ajouté');
+            //$this->addFlash('danger', 'Le programme a bien été supprimé');
+
             return $this->redirectToRoute('program_index');
         }
 
@@ -76,5 +79,17 @@ class ProgramController extends AbstractController
         return $this->render('program/episode_show.html.twig', ['episode' => $episode,
             'program' => $program,
             'season' => $season]);
+    }
+
+    #[Route('/{id}/delete', name: 'delete')]
+    public function delete(Request $request, Program $program, EntityManagerInterface $entityManager): Response
+    {
+
+        $entityManager->remove($program);
+        $entityManager->flush();
+        $this->addFlash('danger', 'Le programme a bien été supprimé');
+
+
+        return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -18,7 +18,7 @@ class Category
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Ne me laisse pas tout vide')]
-    #[Assert\Length(max: 255, MaxMessage: 'La catégorie saisie {{ value }} est trop longue, elle ne devrait pas dépasser {{ limit }} caractères')]
+    #[Assert\Length(max: 255, maxMessage: 'La catégorie saisie {{ value }} est trop longue, elle ne devrait pas dépasser {{ limit }} caractères')]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Program::class)]
