@@ -13,6 +13,8 @@
             </a>
         </article>
     {% endfor %}
+        <a href="{{ path('category_delete', { id: category.id}) }}">Supprimer la catégorie</a>
+    <br>
         <a href="{{ path('category_index') }}">
             Retour à la liste des catégories
         </a>

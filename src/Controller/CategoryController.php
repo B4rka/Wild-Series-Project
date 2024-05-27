@@ -37,6 +37,8 @@ class CategoryController extends AbstractController
             $entityManager->persist($category);
             $entityManager->flush();
 
+            $this->addFlash('success', 'La nouvelle catégorie a bien été ajoutée');
+
             return $this->redirectToRoute('category_index');
         }
 
@@ -60,9 +62,20 @@ class CategoryController extends AbstractController
                 'No program in category : '.$categoryName.' found in program\'s table.'
             );
         }
-    //var_dump($category);
-        //die();
+
         return $this->render('category/show.html.twig', ['programs' => $programs,
             'category' => $category,]);
+    }
+
+    #[Route('/{id}/delete', name: 'delete')]
+    public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
+    {
+
+        $entityManager->remove($category);
+        $entityManager->flush();
+
+        $this->addFlash('danger', 'La catégorie a bien été supprimée');
+
+        return $this->redirectToRoute('category_index', [], Response::HTTP_SEE_OTHER);
     }
 }
