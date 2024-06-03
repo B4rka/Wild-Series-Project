@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Episode;
 use App\Entity\Program;
 use App\Entity\Season;
+use App\Form\EpisodeType;
 use App\Form\ProgramType;
 use App\Repository\SeasonRepository;
 use App\Service\ProgramDuration;
@@ -91,6 +92,23 @@ class ProgramController extends AbstractController
         return $this->render('program/episode_show.html.twig', ['episode' => $episode,
             'program' => $program,
             'season' => $season]);
+    }
+    #[Route('/{slug}/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Program $program, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(ProgramType::class, $program);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('program/edit.html.twig', [
+            'program' => $program,
+            'form' => $form,
+        ]);
     }
 
     #[Route('/{slug}/delete', name: 'delete')]
