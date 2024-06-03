@@ -8,6 +8,7 @@
         <h1>{{ program.title }}</h1>
         <p>{{ program.synopsis }}</p>
         <p>Catégorie : {{ program.category.name }}</p>
+        <p>Durée totale : {{ programDuration }}</p>
         <p>Liste des saisons :</p>
         <ul>
             {% for season in program.seasons  %}
@@ -22,7 +23,7 @@
                 <li>Aucun acteur pour cette série</li>
             {% endfor %}
         </ul>
-        <a href="{{ path('program_delete', { id: program.id}) }}">Supprimer le programme</a>
+        <a href="{{ path('program_delete', { slug: program.slug}) }}">Supprimer le programme</a>
     </article>
     <a href="{{ path('program_index') }}">
         Retour à la liste des programmes

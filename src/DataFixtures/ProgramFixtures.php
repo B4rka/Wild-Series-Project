@@ -7,6 +7,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProgramFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -112,6 +113,13 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             'category' => 'category_Aventure'
         ],
     ];
+
+    private SluggerInterface $slugger;
+
+    public function __construct(SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+    }
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
@@ -120,7 +128,8 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program->setTitle($faker->words(3, true));
             $program->setSynopsis($faker->paragraphs(2, true));
             $program->setCategory($this->getReference('category_' . $faker->numberBetween(1, 5)));
-
+            $slug = $this->slugger->slug($program->getTitle());
+            $program->setSlug($slug);
             $manager->persist($program);
             $this->addReference('program_' . $i, $program);
         }
