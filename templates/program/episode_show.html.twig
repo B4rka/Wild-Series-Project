@@ -6,7 +6,20 @@
     <h1> Episode :  {{ episode.number }}, Saison {{season.number }} de {{ program.title }}</h1>
     <p>{{ episode.synopsis }}</p>
 
-    <a href="{{ path('program_season_show', {program: program.slug, season: season.id}) }}">
+    {% for comment in episode.comments %}
+        <h3>{{ comment.author.email }}</h3>
+        <p>Note : {{ comment.rate }}/6</p>
+        <p>{{ comment.comment }}</p>
+    {% endfor %}
+
+    {% if app.user %}
+        <p>{{ app.user.email }}, voulez-vous laisser un commentaire ?</p>
+        {{ include('Comments/_form.html.twig') }}
+    {% else %}
+
+    {% endif %}
+
+    <a href="{{ path('program_season_show', {program_slug: program.slug, season: season.id}) }}">
         Retour à la liste des saisons
     </a>
     <br>
