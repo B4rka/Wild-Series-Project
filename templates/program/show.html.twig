@@ -4,7 +4,7 @@
 
 {% block body %}
     <article>
-        <img src="{{ program.poster }}" alt="{{ program.title }}">
+        <img src='{{ vich_uploader_asset(program) }}' alt="{{ program.title }}">
         <h1>{{ program.title }}</h1>
         <p>{{ program.synopsis }}</p>
         <p>Catégorie : {{ program.category.name }}</p>
