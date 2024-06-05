@@ -10,6 +10,10 @@
         <h3>{{ comment.author.email }}</h3>
         <p>Note : {{ comment.rate }}/6</p>
         <p>{{ comment.comment }}</p>
+
+        {% if (is_granted("ROLE_ADMIN")) or (app.user == comment.author) %}
+            <a href="{{ path('comment_delete', { 'id': comment.id} ) }}">Supprimer le commentaire</a>
+        {%endif%}
     {% endfor %}
 
     {% if app.user %}

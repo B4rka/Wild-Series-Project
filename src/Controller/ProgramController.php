@@ -46,6 +46,7 @@ class ProgramController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $slug = $slugger->slug($program->getTitle());
             $program->setSlug($slug);
+            $program->setOwner($this->getUser());
             $entityManager->persist($program);
             $entityManager->flush();
 
@@ -121,10 +122,15 @@ class ProgramController extends AbstractController
         $form = $this->createForm(ProgramType::class, $program);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+        if (($this->getUser() === $program->getOwner()) || ($this->isGranted('ROLE_ADMIN'))) {
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->flush();
 
-            return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+            }
+        } else {
+            // If not the owner, throws a 403 Access Denied exception
+            throw $this->createAccessDeniedException('Only the owner can edit the program!');
         }
 
         return $this->render('program/edit.html.twig', [
