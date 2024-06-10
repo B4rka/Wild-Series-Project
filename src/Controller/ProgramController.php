@@ -12,6 +12,7 @@ use App\Form\CommentsType;
 use App\Form\SearchProgramType;
 use App\Repository\SeasonRepository;
 use App\Service\ProgramDuration;
+use Symfony\Component\HttpFoundation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,12 +34,11 @@ class ProgramController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            //$data=$search['search'];
-            //return $this->redirectToRoute('program_new');
             $test = $form->getData()['search'];
             $programs = $programRepository->findLikeName($test);
-            dump($programs);
-            //return $this->redirectToRoute('program_new');
+            $session = $request->getSession();
+            $session->set('search', $programs);
+            return $this->redirectToRoute('program_search', ['programs' => $programs]);
         } else {
             $programs = $programRepository->findAll();
         }
@@ -46,6 +46,17 @@ class ProgramController extends AbstractController
         return $this->render('program/index.html.twig', [
             'programs' => $programs,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/search', name: 'search')]
+    public function search(Request $request): Response
+    {
+        $session = $request->getSession();
+
+        $programs = $session->get('search');
+        return $this->render('program/search.html.twig', [
+            'programs' => $programs,
         ]);
     }
 
