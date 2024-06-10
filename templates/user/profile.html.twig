@@ -1,0 +1,6 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>{{ app.user.email }}</h1>
+    <p>Voici votre rôle : {{ app.user.roles.0 }}</p>
+{% endblock %}

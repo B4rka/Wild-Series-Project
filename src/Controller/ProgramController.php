@@ -9,6 +9,7 @@ use App\Entity\Season;
 use App\Form\EpisodeType;
 use App\Form\ProgramType;
 use App\Form\CommentsType;
+use App\Form\SearchProgramType;
 use App\Repository\SeasonRepository;
 use App\Service\ProgramDuration;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,11 +27,25 @@ use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 class ProgramController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(ProgramRepository $programRepository): Response
+    public function index(Request $request, ProgramRepository $programRepository): Response
     {
-        $programs = $programRepository->findAll();
+        $form = $this->createForm(SearchProgramType::class, null);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            //$data=$search['search'];
+            //return $this->redirectToRoute('program_new');
+            $test = $form->getData()['search'];
+            $programs = $programRepository->findLikeName($test);
+            dump($programs);
+            //return $this->redirectToRoute('program_new');
+        } else {
+            $programs = $programRepository->findAll();
+        }
+
         return $this->render('program/index.html.twig', [
             'programs' => $programs,
+            'form' => $form,
         ]);
     }
 

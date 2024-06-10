@@ -10,7 +10,7 @@
                     <a class="nav-link active" aria-current="page" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="{{ path('program_index') }}">Programs</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -28,8 +28,9 @@
                 </li>
             </ul>
             {% if app.user %}
-                {{ app.user.email }}
-                <a href="{{ path('app_logout') }}"> Se déconnecter</a>
+                <a class="navinfo" href="{{ path('user_profile') }}">Mon Compte</a>
+                <p class="navinfo">{{ app.user.email }}</p>
+                <a class="navinfo" href="{{ path('app_logout') }}"> Se déconnecter</a>
             {% else %}
                 <a href="{{ path('app_login') }}"> Se connecter</a>
             {% endif %}
