@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Série cherchées : {% endblock %}
+
+{% block body %}
+ {% for program in programs %}
+     <div>
+         <h2>{{ loop.index }} / {{ program.title }} - Catégorie : {{ program.category.name }}</h2>
+         <p>{{ program.synopsis }}</p>
+         {# Lien vers la fiche de la série : #}
+         <a href="{{ path("program_show", { slug: program.slug }) }}">Voir la fiche</a>
+     </div>
+     {% if (is_granted("ROLE_ADMIN")) or (app.user == program.owner) %}
+         <a href="{{ path('program_edit', { 'slug': program.slug} ) }}">Éditer</a>
+     {%endif%}
+
+ {% else %}
+     Aucune série trouvée.
+ {% endfor %}
+
+<a href="{{ path('app_index') }}">
+    Retour à l'accueil
+</a>
+
+{% endblock %}
