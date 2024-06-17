@@ -55,6 +55,7 @@ class ProgramController extends AbstractController
         $session = $request->getSession();
 
         $programs = $session->get('search');
+
         return $this->render('program/search.html.twig', [
             'programs' => $programs,
         ]);

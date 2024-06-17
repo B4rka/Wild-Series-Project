@@ -26,7 +26,9 @@
                 <li class="nav-item">
                     <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                 </li>
+                {{ component('Navbar') }}
             </ul>
+            <button data-action="theme#toggleDarkMode">Toggle dark mode</button>
             {% if app.user %}
                 <a class="navinfo" href="{{ path('user_profile') }}">Mon Compte</a>
                 <p class="navinfo">{{ app.user.email }}</p>

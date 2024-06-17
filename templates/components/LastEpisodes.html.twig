@@ -1,0 +1,15 @@
+<div{{ attributes }} class="episode-cards">
+    <h2>Nos derniers épisodes :</h2>
+    <div class="cards-container">
+    {% for episode in this.lastEpisodes %}
+        <div class="card-unit" style="width: 18rem;">
+            <img src="{{ asset('images/91162536.webp') }}" class="card-img-top" alt="LennyFace">
+            <div class="card-body">
+                <h5 class="card-title">{{ episode.title }}</h5>
+                <p class="card-text">{{ episode.synopsis}}</p>
+                <a href="{{ path('app_episode_show', {'slug': episode.slug}) }}" class="btn btn-primary">Voir la fiche épisode</a>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
